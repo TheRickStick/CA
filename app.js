@@ -8,6 +8,7 @@ const { auth } = require('express-openid-connect');
 
 var indexRouter = require('./routes/index');
 var participantsRouter = require('./routes/participants');
+var participantDetails = require('./routes/participantDetails');
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use(function (req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/participants', participantsRouter);
+app.use('/participants', participantDetails);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
