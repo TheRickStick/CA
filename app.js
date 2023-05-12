@@ -7,7 +7,7 @@ var logger = require('morgan');
 const { auth } = require('express-openid-connect');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var participantsRouter = require('./routes/participants');
 
 var app = express();
 
