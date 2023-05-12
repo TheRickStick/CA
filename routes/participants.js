@@ -10,40 +10,95 @@ const db = CyclicDB(process.env.CYCLIC_DB)
 let participants = db.collection('participants')
 
 
+const { check, validationResult } = require('express-validator');
 
-    router.get('/', requiresAuth(), async function(req, res, next) {
-        let list = await participants.list();
-        res.send(list);
-      });
-      
-      router.get('/:key',requiresAuth(), async function(req, res, next) {
-        let item = await participants.get(req.params.key);
-        res.send(item);
-      });
-      
-      router.post('/', requiresAuth(), validateParticipant, async function(req, res, next) {
-        const {email, firstName, lastName, age} = req.body;
-        await participants.set(email, {
-          firstName: firstName,
-          secondName: lastName,
-          age: age
-        })
-        res.end();
-      });
-      
-      router.put('/', requiresAuth(), validateParticipant, async function(req, res, next) {
-        const {email, firstName, lastName, age} = req.body;
-        await participants.set(email, {
-          firstName: firstName,
-          secondName: lastName,
-          age: age
-        })
-        res.end();
-      });
-      
-      router.delete('/:key', requiresAuth(), async function(req, res, next) {
-        await participants.delete(req.params.key);
-        res.end();
-      });
-  
-  module.exports = router;
+const validateParticipant = [
+  check('email').isEmail().withMessage('Invalid email format'),
+  check('firstname').notEmpty().withMessage('First name is required'),
+  check('lastname').notEmpty().withMessage('Last name is required'),
+  check('dob').isISO8601().withMessage('Invalid date format (YYYY-MM-DD)'),
+  check('active').isBoolean().withMessage('Active must be a boolean value'),
+  check('work').exists().withMessage('Work fragment is required'),
+  check('home').exists().withMessage('Home fragment is required'),
+];
+
+// List all participants
+router.get('/', requiresAuth(), async function (req, res, next) {
+  let list = await participants.list();
+  res.send(list);
+});
+
+// Get participant details by email
+router.get('/:email', requiresAuth(), async function (req, res, next) {
+  let item = await participants.get(req.params.email);
+  if (!item) {
+    return res.status(404).json({ error: 'Participant not found' });
+  }
+  res.send(item);
+});
+
+// Add a new participant
+router.post('/', requiresAuth(), validateParticipant, async function (req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const {
+    email,
+    firstname,
+    lastname,
+    dob,
+    active,
+    work,
+    home,
+  } = req.body;
+
+  await participants.set(email, {
+    firstname,
+    lastname,
+    dob,
+    active,
+    work,
+    home,
+  });
+
+  res.end();
+});
+
+// Update a participant by email
+router.put('/:email', requiresAuth(), validateParticipant, async function (req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const {
+    email,
+    firstname,
+    lastname,
+    dob,
+    active,
+    work,
+    home,
+  } = req.body;
+
+  await participants.set(email, {
+    firstname,
+    lastname,
+    dob,
+    active,
+    work,
+    home,
+  });
+
+  res.end();
+});
+
+// Soft-delete a participant by email
+router.delete('/:email', requiresAuth(), async function (req, res, next) {
+  await participants.update(req.params.email, { active: false });
+  res.end();
+});
+
+module.exports = router;
