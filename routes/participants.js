@@ -38,7 +38,7 @@ router.get('/:email', requiresAuth(), async function (req, res, next) {
 });
 
 // Add a new participant
-router.post('/add', validateParticipant, async function (req, res, next) {
+router.post('/add', requiresAuth(), validateParticipant, async function (req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
