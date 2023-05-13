@@ -20,6 +20,11 @@ router.get('/details/deleted',  async function (req, res, next) {
 // Get work details of the specified participant (not deleted)
 router.get('/work/:email',  async function (req, res, next) {
   let participant = await participants.get(req.params.email);
+  
+  // Add debug logs
+  console.log('email:', req.params.email);
+  console.log('participant:', participant);
+
   if (!participant || !participant.active) {
     return res.status(404).json({ error: 'Participant not found or deleted' });
   }
