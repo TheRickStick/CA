@@ -133,6 +133,38 @@ router.delete('/:email',  async function (req, res, next) {
   res.end();
 });
 
+// Get personal details of all deleted participants
+router.get('/details/deleted',  async function (req, res, next) {
+  let list = await participants.list({ active: false });
+  let personalDetails = list.map(participant => ({
+    email: participant.email,
+    firstname: participant.firstname,
+    lastname: participant.lastname,
+    active: participant.active,
+  }));
+  res.send(personalDetails);
+});
+
+router.get('/work/:email',  async function (req, res, next) {
+  console.log('Requested email:', req.params.email);
+  
+  let participant = await participants.get(req.params.email);
+  console.log('Participant:', participant);
+  
+  if (!participant || !participant.active) {
+    return res.status(404).json({ error: 'Participant not found or deleted' });
+  }
+  res.send(participant.work);
+});
+
+// Get home details of the specified participant (not deleted)
+router.get('/home/:email',  async function (req, res, next) {
+  let participant = await participants.get(req.params.email);
+  if (!participant || !participant.active) {
+    return res.status(404).json({ error: 'Participant not found or deleted' });
+  }
+  res.send(participant.home);
+});
 
 
 module.exports = router;
