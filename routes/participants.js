@@ -43,11 +43,6 @@ router.get('/',  async function (req, res, next) {
   res.send(formattedParticipants);
 });
 
-  
-  res.send(formattedParticipants);
-});
-
-
 
 
 // Get participant details by email
