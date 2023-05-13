@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-//const { requiresAuth } = require('express-openid-connect');
 const CyclicDB = require('@cyclic.sh/dynamodb');
 const db = CyclicDB(process.env.CYCLIC_DB);
 let participants = db.collection('participants');
+
 
 // Get personal details of all active participants
 router.get('/details',  async function (req, res, next) {
