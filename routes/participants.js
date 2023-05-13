@@ -139,17 +139,33 @@ const isDeleted = (participant) => {
   return active === false || active === 'false' || active === 0;
 };
 
+// Get personal details of all deleted participants
 router.get('/deleted', async function (req, res, next) {
   let list = await participants.list();
 
   console.log('All Participants:', list.results);
 
-  const deletedParticipants = list.results
-    .filter(isDeleted)
-    .map((participant) => ({
-      email: participant.key,
-      ...participant,
-    }));
+  const getEmails = list.results.map(item => item.key);
+
+  const getParticipantsData = async () => {
+    const participantsData = [];
+
+    for (const email of getEmails) {
+      const participantData = await participants.get(email);
+      participantsData.push({
+        email,
+        ...participantData,
+      });
+    }
+
+    return participantsData;
+  };
+
+  const allParticipants = await getParticipantsData();
+  const deletedParticipants = allParticipants.filter(participant => {
+    const { active } = participant;
+    return active === false || active === 'false' || active === 0;
+  });
 
   console.log('Deleted Participants:', deletedParticipants);
 
