@@ -135,7 +135,7 @@ router.delete('/:email',  async function (req, res, next) {
 
 // Get personal details of all deleted participants
 const isDeleted = (participant) => {
-  const { active } = participant.props;
+  const { active } = participant;
   return active === false || active === 'false' || active === 0;
 };
 
