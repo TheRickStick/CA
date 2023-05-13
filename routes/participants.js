@@ -139,7 +139,7 @@ const isDeleted = (participant) => {
   return active === false || active === 'false' || active === 0;
 };
 
-router.get('/deleted', async function (req, res, next) {
+router.get('/details/deleted', async function (req, res, next) {
   let list = await participants.list();
 
   const deletedParticipants = list.results
@@ -151,7 +151,6 @@ router.get('/deleted', async function (req, res, next) {
 
   res.send(deletedParticipants);
 });
-
 
 
 // Get work details of the specified participant (not deleted)
