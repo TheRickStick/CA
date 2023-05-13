@@ -134,20 +134,22 @@ router.delete('/:email',  async function (req, res, next) {
 });
 
 // Get personal details of all deleted participants
-router.get('/deleted',  async function (req, res, next) {
+const isDeleted = (participant) => {
+  const { active } = participant.props;
+  return active === false || active === 'false' || active === 0;
+};
+
+router.get('/details/deleted', async function (req, res, next) {
   let list = await participants.list();
 
-  let deletedParticipants = list.results.filter((participant) => !participant.active);
-
-  let personalDetails = deletedParticipants.map((participant) => ({
-    email: participant.email,
-    firstname: participant.firstname,
-    lastname: participant.lastname,
-    active: participant.active,
+  const deletedParticipants = list.results.filter(isDeleted).map((participant) => ({
+    email: participant.key,
+    ...participant,
   }));
 
-  res.send(personalDetails);
+  res.send(deletedParticipants);
 });
+
 
 
 // Get work details of the specified participant (not deleted)
