@@ -5,18 +5,6 @@ const db = CyclicDB(process.env.CYCLIC_DB);
 let participants = db.collection('participants');
 
 
-// Get personal details of all active participants
-router.get('/details',  async function (req, res, next) {
-  let list = await participants.list({ active: true });
-  let personalDetails = list.map(participant => ({
-    email: participant.email,
-    firstname: participant.firstname,
-    lastname: participant.lastname,
-    active: participant.active,
-  }));
-  res.send(personalDetails);
-});
-
 // Get personal details of all deleted participants
 router.get('/details/deleted',  async function (req, res, next) {
   let list = await participants.list({ active: false });

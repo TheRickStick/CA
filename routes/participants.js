@@ -64,11 +64,6 @@ router.get('/details/:email', async function (req, res, next) {
   });
 });
 
-
-
-
-
-
 // Add a new participant
 router.post('/add', validateParticipant, async function (req, res, next) {
   const errors = validationResult(req);
