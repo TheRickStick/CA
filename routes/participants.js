@@ -142,10 +142,12 @@ const isDeleted = (participant) => {
 router.get('/deleted', async function (req, res, next) {
   let list = await participants.list();
 
-  const deletedParticipants = list.results.filter(isDeleted).map((participant) => ({
-    email: participant.key,
-    ...participant,
-  }));
+  const deletedParticipants = list.results
+    .filter(isDeleted)
+    .map((participant) => ({
+      email: participant.key,
+      ...participant.props,
+    }));
 
   res.send(deletedParticipants);
 });
