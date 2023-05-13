@@ -134,7 +134,7 @@ router.delete('/:email',  async function (req, res, next) {
 });
 
 // Get personal details of all deleted participants
-router.get('/details/deleted',  async function (req, res, next) {
+router.get('/deleted',  async function (req, res, next) {
   let list = await participants.list({ active: false });
   let personalDetails = list.map(participant => ({
     email: participant.email,
