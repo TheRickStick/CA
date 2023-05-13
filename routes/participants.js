@@ -54,15 +54,22 @@ router.get('/details/:email', async function (req, res, next) {
   }
 
   let item = await participants.get(email);
-  if (!item || item.active !== true) {
+  if (!item || !isParticipantActive(item.props.active)) {
     return res.status(404).json({ error: 'Participant not found or deleted' });
   }
+
+  const { firstname, lastname, active } = item.props;
   res.send({
-    firstname: item.firstname,
-    lastname: item.lastname,
-    active: item.active
+    firstname,
+    lastname,
+    active
   });
 });
+
+function isParticipantActive(active) {
+  return active === true || active === 'true' || active === 1;
+}
+
 
 // Add a new participant
 router.post('/add', validateParticipant, async function (req, res, next) {
@@ -133,13 +140,8 @@ router.delete('/:email',  async function (req, res, next) {
   res.end();
 });
 
-// Get personal details of all deleted participants
-const isDeleted = (participant) => {
-  const { active } = participant;
-  return active === false || active === 'false' || active === 0;
-};
 
-// Get personal details of all deleted participants
+
 // Get personal details of all deleted participants
 router.get('/deleted', async function (req, res, next) {
   let list = await participants.list();
@@ -177,26 +179,61 @@ router.get('/deleted', async function (req, res, next) {
 
 
 // Get work details of the specified participant (not deleted)
-router.get('/work/:email',  async function (req, res, next) {
-  console.log('Requested email:', req.params.email);
-  
-  let participant = await participants.get(req.params.email);
-  console.log('Participant:', participant);
-  
-  if (!participant || !participant.active) {
+router.get('/work/:email', async function (req, res, next) {
+  const email = req.params.email;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  const participant = await participants.get(email);
+
+  if (!participant || !isParticipantActive(participant.props.active)) {
     return res.status(404).json({ error: 'Participant not found or deleted' });
   }
-  res.send(participant.work);
+
+  const { work } = participant.props;
+  const { companyname, salary, currency } = work;
+
+  res.send({
+    companyname,
+    salary,
+    currency
+  });
 });
 
+function isParticipantActive(active) {
+  return active === true || active === 'true' || active === 1;
+}
+
+
 // Get home details of the specified participant (not deleted)
-router.get('/home/:email',  async function (req, res, next) {
-  let participant = await participants.get(req.params.email);
-  if (!participant || !participant.active) {
+router.get('/home/:email', async function (req, res, next) {
+  const email = req.params.email;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  const participant = await participants.get(email);
+
+  if (!participant || !isParticipantActive(participant.props.active)) {
     return res.status(404).json({ error: 'Participant not found or deleted' });
   }
-  res.send(participant.home);
+
+  const { home } = participant.props;
+  const { country, city } = home;
+
+  res.send({
+    country,
+    city
+  });
 });
+
+function isParticipantActive(active) {
+  return active === true || active === 'true' || active === 1;
+}
+
 
 
 module.exports = router;
