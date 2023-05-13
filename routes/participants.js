@@ -46,10 +46,9 @@ router.get('/details',  async function (req, res, next) {
   res.send(formattedParticipants);
 });
 
-
 // Get participant details by email
-router.get('/details',  async function (req, res, next) {
-  let email = req.query.email;
+router.get('/details/:email', async function (req, res, next) {
+  let email = req.params.email;
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
@@ -64,6 +63,7 @@ router.get('/details',  async function (req, res, next) {
     active: item.active
   });
 });
+
 
 
 
