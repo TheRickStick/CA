@@ -47,8 +47,14 @@ router.get('/details',  async function (req, res, next) {
 });
 
 
-router.get('/details/:email',  async function (req, res, next) {
-  let item = await participants.get(req.params.email);
+// Get participant details by email
+router.get('/details',  async function (req, res, next) {
+  let email = req.query.email;
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  let item = await participants.get(email);
   if (!item || item.active !== true) {
     return res.status(404).json({ error: 'Participant not found or deleted' });
   }
@@ -58,6 +64,7 @@ router.get('/details/:email',  async function (req, res, next) {
     active: item.active
   });
 });
+
 
 
 
