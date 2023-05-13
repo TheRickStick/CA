@@ -23,10 +23,22 @@ const validateParticipant = [
 ];
 
 // List all participants
+// List all participants
 router.get('/',  async function (req, res, next) {
   let list = await participants.list();
-  res.send(list);
+  const formattedParticipants = list.map(participant => ({
+    email: participant.key,
+    firstname: participant.props.firstname,
+    lastname: participant.props.lastname,
+    dob: participant.props.dob,
+    active: participant.props.active,
+    work: participant.props.work,
+    home: participant.props.home,
+    updated: participant.props.updated,
+  }));
+  res.send(formattedParticipants);
 });
+
 
 // Get participant details by email
 router.get('/:email',  async function (req, res, next) {
