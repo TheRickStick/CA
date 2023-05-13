@@ -140,6 +140,7 @@ const isDeleted = (participant) => {
 };
 
 // Get personal details of all deleted participants
+// Get personal details of all deleted participants
 router.get('/deleted', async function (req, res, next) {
   let list = await participants.list();
 
@@ -154,7 +155,7 @@ router.get('/deleted', async function (req, res, next) {
       const participantData = await participants.get(email);
       participantsData.push({
         email,
-        ...participantData,
+        ...participantData.props,
       });
     }
 
@@ -171,6 +172,7 @@ router.get('/deleted', async function (req, res, next) {
 
   res.send(deletedParticipants);
 });
+
 
 
 
