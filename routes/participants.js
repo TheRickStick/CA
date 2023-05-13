@@ -139,18 +139,17 @@ const isDeleted = (participant) => {
   return active === false || active === 'false' || active === 0;
 };
 
-router.get('/details/deleted', async function (req, res, next) {
+router.get('/deleted', async function (req, res, next) {
   let list = await participants.list();
 
-  const deletedParticipants = list.results
-    .filter(isDeleted)
-    .map((participant) => ({
-      email: participant.key,
-      ...participant.props,
-    }));
+  const deletedParticipants = list.results.filter(isDeleted).map((participant) => ({
+    email: participant.key,
+    ...participant,
+  }));
 
   res.send(deletedParticipants);
 });
+
 
 
 // Get work details of the specified participant (not deleted)
