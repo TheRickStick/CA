@@ -135,14 +135,11 @@ router.delete('/:email',  async function (req, res, next) {
 
 // Get personal details of all deleted participants
 router.get('/deleted',  async function (req, res, next) {
-  let list = await participants.query({
-    FilterExpression: "active = :active",
-    ExpressionAttributeValues: {
-      ":active": false,
-    },
-  });
+  let list = await participants.list();
 
-  let personalDetails = list.Items.map((participant) => ({
+  let deletedParticipants = list.results.filter((participant) => !participant.active);
+
+  let personalDetails = deletedParticipants.map((participant) => ({
     email: participant.email,
     firstname: participant.firstname,
     lastname: participant.lastname,
