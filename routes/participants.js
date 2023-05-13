@@ -23,7 +23,7 @@ const validateParticipant = [
 ];
 
 // List all participants
-router.get('/',  async function (req, res, next) {
+router.get('/details',  async function (req, res, next) {
   let list = await participants.list();
   
   const getEmails = list.results.map(item => item.key);
@@ -52,13 +52,18 @@ router.get('/',  async function (req, res, next) {
 
 
 // Get participant details by email
-router.get('/:email',  async function (req, res, next) {
+router.get('/details/:email',  async function (req, res, next) {
   let item = await participants.get(req.params.email);
-  if (!item) {
-    return res.status(404).json({ error: 'Participant not found' });
+  if (!item || !item.active) {
+    return res.status(404).json({ error: 'Participant not found or deleted' });
   }
-  res.send(item);
+  res.send({
+    firstname: item.firstname,
+    lastname: item.lastname,
+    active: item.active
+  });
 });
+
 
 // Add a new participant
 router.post('/add', validateParticipant, async function (req, res, next) {
