@@ -124,8 +124,14 @@ router.put('/:email', validateParticipant, async function (req, res, next) {
 
 // Soft-delete a participant by email
 router.delete('/:email',  async function (req, res, next) {
-  await participants.update(req.params.email, { active: false });
+  let participant = await participants.get(req.params.email);
+  if (!participant) {
+    return res.status(404).json({ error: 'Participant not found' });
+  }
+  
+  await participants.set(req.params.email, { ...participant, active: false });
   res.end();
 });
+
 
 module.exports = router;
