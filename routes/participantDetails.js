@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { requiresAuth } = require('express-openid-connect');
+//const { requiresAuth } = require('express-openid-connect');
 const CyclicDB = require('@cyclic.sh/dynamodb');
 const db = CyclicDB(process.env.CYCLIC_DB);
 let participants = db.collection('participants');

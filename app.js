@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const { auth } = require('express-openid-connect');
+//const { auth } = require('express-openid-connect');
 
 var indexRouter = require('./routes/index');
 var participantsRouter = require('./routes/participants');
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const config = {
+/*const config = {
   authRequired: false,
   auth0Logout: true
 };
@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
   res.locals.user = req.oidc.user;
   next();
 });
-
+*/
 app.use('/', indexRouter);
 app.use('/participants', participantsRouter);
 app.use('/participants', participantDetails);
