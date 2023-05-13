@@ -24,9 +24,10 @@ const validateParticipant = [
 
 // List all participants
 // List all participants
+// List all participants
 router.get('/',  async function (req, res, next) {
-  let list = await participants.list();
-  const formattedParticipants = list.map(participant => ({
+  let response = await participants.list();
+  const formattedParticipants = response.results.map(participant => ({
     email: participant.key,
     firstname: participant.props.firstname,
     lastname: participant.props.lastname,
@@ -38,6 +39,7 @@ router.get('/',  async function (req, res, next) {
   }));
   res.send(formattedParticipants);
 });
+
 
 
 // Get participant details by email
