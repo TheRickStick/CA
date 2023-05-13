@@ -146,7 +146,7 @@ router.get('/deleted', async function (req, res, next) {
     .filter(isDeleted)
     .map((participant) => ({
       email: participant.key,
-      ...participant.props,
+      ...participant,
     }));
 
   res.send(deletedParticipants);
