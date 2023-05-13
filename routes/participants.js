@@ -23,13 +23,13 @@ const validateParticipant = [
 ];
 
 // List all participants
-router.get('/', requiresAuth(), async function (req, res, next) {
+router.get('/',  async function (req, res, next) {
   let list = await participants.list();
   res.send(list);
 });
 
 // Get participant details by email
-router.get('/:email', requiresAuth(), async function (req, res, next) {
+router.get('/:email',  async function (req, res, next) {
   let item = await participants.get(req.params.email);
   if (!item) {
     return res.status(404).json({ error: 'Participant not found' });
@@ -38,7 +38,7 @@ router.get('/:email', requiresAuth(), async function (req, res, next) {
 });
 
 // Add a new participant
-router.post('/add', requiresAuth(), validateParticipant, async function (req, res, next) {
+router.post('/add', validateParticipant, async function (req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -67,7 +67,7 @@ router.post('/add', requiresAuth(), validateParticipant, async function (req, re
 });
 
 // Update a participant by email
-router.put('/:email', requiresAuth(), validateParticipant, async function (req, res, next) {
+router.put('/:email', validateParticipant, async function (req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -96,7 +96,7 @@ router.put('/:email', requiresAuth(), validateParticipant, async function (req, 
 });
 
 // Soft-delete a participant by email
-router.delete('/:email', requiresAuth(), async function (req, res, next) {
+router.delete('/:email',  async function (req, res, next) {
   await participants.update(req.params.email, { active: false });
   res.end();
 });
