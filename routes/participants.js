@@ -24,22 +24,29 @@ const validateParticipant = [
 
 // List all participants
 router.get('/',  async function (req, res, next) {
-  let list = await participants.list({ includeData: true });
+  let list = await participants.list();
   
-  const formattedParticipants = list.results.map(item => {
-    return {
-      email: item.key,
-      firstname: item.data.firstname,
-      lastname: item.data.lastname,
-      dob: item.data.dob,
-      active: item.data.active,
-      work: item.data.work,
-      home: item.data.home,
-    };
-  });
+  const getEmails = list.results.map(item => item.key);
+  
+  const getParticipantsData = async () => {
+    const participantsData = [];
 
+    for (const email of getEmails) {
+      const participantData = await participants.get(email);
+      participantsData.push({
+        email,
+        ...participantData,
+      });
+    }
+
+    return participantsData;
+  };
+
+  const formattedParticipants = await getParticipantsData();
+  
   res.send(formattedParticipants);
 });
+
 
 
 
