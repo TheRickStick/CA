@@ -22,7 +22,7 @@ const validateParticipant = [
 ];
 
 // List all participants
-router.get('/details',  async function (req, res, next) {
+router.get('/',  async function (req, res, next) {
   let list = await participants.list();
   
   const getEmails = list.results.map(item => item.key);
@@ -45,6 +45,40 @@ router.get('/details',  async function (req, res, next) {
   
   res.send(formattedParticipants);
 });
+
+//List all active participants
+router.get('/details', async function (req, res, next) {
+    let list = await participants.list();
+  
+    console.log('All Participants:', list.results);
+  
+    const getEmails = list.results.map(item => item.key);
+  
+    const getParticipantsData = async () => {
+      const participantsData = [];
+  
+      for (const email of getEmails) {
+        const participantData = await participants.get(email);
+        participantsData.push({
+          email,
+          ...participantData.props,
+        });
+      }
+  
+      return participantsData;
+    };
+  
+    const allParticipants = await getParticipantsData();
+    const activeParticipants = allParticipants.filter(participant => {
+      const { active } = participant;
+      return active === true || active === 'true' || active === 1;
+    });
+  
+    console.log('Active Participants:', activeParticipants);
+  
+    res.send(activeParticipants);
+  });
+
 
 // Get participant details by email
 router.get('/details/:email', async function (req, res, next) {

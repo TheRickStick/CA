@@ -1,4 +1,6 @@
-The application is hosted on the Cyclic.sh platform and utilizes basic authentication. The default admin user credentials are as follows:
+The application is hosted on the Cyclic.sh platform and utilizes basic authentication.
+You can visit the application by going to https://busy-jade-wombat-belt.cyclic.app
+The default admin user credentials are as follows:
 
 Username: admin
 Password: P4ssword
