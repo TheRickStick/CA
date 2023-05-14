@@ -1,0 +1,58 @@
+The application is hosted on the Cyclic.sh platform and utilizes basic authentication. The default admin user credentials are as follows:
+
+Username: admin
+Password: P4ssword
+Access to the application's endpoints is restricted to the authenticated admin user.
+
+Installation and Configuration
+Clone the repository from GitHub.
+Install the required dependencies using npm install.
+Create a .env file in the root directory of the application and configure the following environment variables:
+$Env:AWS_REGION="eu-north-1"
+$Env:AWS_ACCESS_KEY_ID="ASIAWYRNPX6N4I5EWE4L"
+$Env:AWS_SECRET_ACCESS_KEY="5YEXYvpAuGGg/KBa+EPLoKKRgpBICqCqa8xroN4q"
+$Env:AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjENH//////////wEaCXVzLWVhc3QtMiJIMEYCIQCpHXx1VAg4Eby5hcKHCs4cg1sUEk59cTFTWmRYg5IFGAIhANjnKK4L0qcMblXVi51bmBA/PtswwQhRTG+tiCGb/dJ/KrgCCOr//////////wEQABoMNDY1MDI1NjEzNzIzIgySbHJm7n/SUk5OwVEqjAIkCoPPa8vbWa8DronKz+Af3Bt0OaPnNU+1WjggJ3llF2boS7x3gnWzO8XRrlBLdV5/IiRJXapKt56xd7FnwLk4ma0+Fv+3qTHHhm/f4A4zs1MnKrUfSObSlktTRo2amuMcuC0fUWw0Wu4NKPt5afE2zL4x6YiQpkc9MXNvvXs6z4bgayRneNGPpd9ilhI3IEFrcFgYijpUGzsbDhSRjTb4z7svIT9HOS6Gs8k4WIl/e25VNJaW5Upt8OFvDL1D0YQPp2dIWd+LrkvWf5lMuYacZawh9GXauemBSbU6GBFIORhuKtDv2ap036Ge03w/tLC9h3mE3/IWohO0eUcYEQ6HisFYcDDWkxCwWMTbML/JgqMGOpwBKgkrEFturymIW8N1FI5F6iOlKe/YjltCYtGuKNlodSxXEhC5OnD15yY0poI3R/M/XMvKQpu+J7keoodczo8WHnFecBYBFUDXbOggOuDSfY3j5yOHPJqvySJCbuLqYLd81rUyuNd9p/BQHDmuBVJT4ZEemUgyu8BwhIdcRhXpRSZCwckopdxSV3z17LlRNZ7Yfmy9cAnkcTs/A5a0"
+
+API Endpoints
+Participant List
+POST /participants/add: Adds the provided participant's data to the database. The request body should contain all participant details in JSON format.
+
+GET /participants: Returns a list of all participants in a JSON object.
+
+Participant Details
+GET /participants/details: Returns the personal details (including first name and last name) of all active participants.
+
+GET /participants/details/deleted: Returns the personal details (including first name and last name) of all deleted participants.
+
+GET /participants/details/:email: Returns the personal details (including first name, last name, and active status) of the specified participant with the given email. Only participants who are not deleted will be returned.
+
+GET /participants/work/:email: Returns the work details (including company name, salary, and currency) of the specified participant with the given email. Only participants who are not deleted will be returned.
+
+GET /participants/home/:email: Returns the home details (including country and city) of the specified participant with the given email. Only participants who are not deleted will be returned.
+
+Deleting / Updating the Participant
+DELETE /participants/:email: Soft-deletes the participant with the provided email from the database. Only requests from the authenticated admin user can perform this operation.
+
+PUT /participants/:email: Updates the participant with the provided email in the database. The request body should contain the updated participant details in JSON format. Only requests from the authenticated admin user can perform this operation.
+
+Testing
+You can test the application and its API endpoints using Postman. Ensure that you have authenticated as the admin user using basic authentication with the provided credentials. Submit the requests to the corresponding endpoints with the required parameters and data.
+
+Please use this format to add or update participants in Postman: 
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "dob": "1990-01-01",
+  "active": false,
+  "work": {
+    "companyname": "NewTechCorp",
+    "salary": 75000,
+    "currency": "USD"
+  },
+  "home": {
+    "country": "USA",
+    "city": "Los Angeles"
+  }
+}
+
+You can use whatever name or other data you see fit, but please remember to put in all the values correctly otherwise you will receive an error message. 
