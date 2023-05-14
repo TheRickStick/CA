@@ -17,7 +17,7 @@ BASE_URL=https://busy-jade-wombat-belt.cyclic.app/
 
 
 API Endpoints
-Participant List
+
 POST /participants/add: Adds the provided participant's data to the database. The request body should contain all participant details in JSON format.
 
 GET /participants: Returns a list of all participants in a JSON object.
@@ -27,16 +27,16 @@ GET /participants/details: Returns the personal details (including first name an
 
 GET /participants/details/deleted: Returns the personal details (including first name and last name) of all deleted participants.
 
-GET /participants/details/:email: Returns the personal details (including first name, last name, and active status) of the specified participant with the given email. Only participants who are not deleted will be returned.
+GET /participants/details/:email Returns the personal details (including first name, last name, and active status) of the specified participant with the given email. Only participants who are not deleted will be returned.
 
-GET /participants/work/:email: Returns the work details (including company name, salary, and currency) of the specified participant with the given email. Only participants who are not deleted will be returned.
+GET /participants/work/:email Returns the work details (including company name, salary, and currency) of the specified participant with the given email. Only participants who are not deleted will be returned.
 
-GET /participants/home/:email: Returns the home details (including country and city) of the specified participant with the given email. Only participants who are not deleted will be returned.
+GET /participants/home/:email Returns the home details (including country and city) of the specified participant with the given email. Only participants who are not deleted will be returned.
 
 Deleting / Updating the Participant
-DELETE /participants/:email: Soft-deletes the participant with the provided email from the database. Only requests from the authenticated admin user can perform this operation.
+DELETE /participants/:email Soft-deletes the participant with the provided email from the database. Only requests from the authenticated admin user can perform this operation.
 
-PUT /participants/:email: Updates the participant with the provided email in the database. The request body should contain the updated participant details in JSON format. Only requests from the authenticated admin user can perform this operation.
+PUT /participants/:email Updates the participant with the provided email in the database. The request body should contain the updated participant details in JSON format. Only requests from the authenticated admin user can perform this operation.
 
 Testing
 You can test the application and its API endpoints using Postman. Ensure that you have authenticated as the admin user using basic authentication with the provided credentials. Submit the requests to the corresponding endpoints with the required parameters and data.
